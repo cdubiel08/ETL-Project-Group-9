@@ -23,10 +23,13 @@ db = client.covidcrypto_db
 def welcome():
     return (
         f"Welcome to the Covid/Crypto Info <br/><br/>"
-        f"Available Routes:<br/>"
-        f"/data-json/<br/>"
-        f"/date"
-        
+        f"Available Routes: <br/>"
+        f"/data-json/ <br/>"
+        f"    - Returns JSON of entire dataset <br/>"
+        f"/date/ <br/>"
+        f"    - input date format: YYYY-MM-DD, returns data for specific date <br/>"
+        f"/covid_countries/country <br/>"
+        f"    - input country name requires proper casing (e.g. \"Canada\" not \"canada\"), returns data for specific country over entire date range of dataset"      
     )
 
 
@@ -35,16 +38,32 @@ def welcome():
 def data ():
     # Store the entire team collection in a list
     complete_data = list(db.data.find())
-    print(complete_data)
+    for item in complete_data:
+        item.pop('_id')
 
     # Return the template with the players list passed in
     return jsonify(complete_data)
 
 # Define route to insert new players into the database
 @app.route('/<date>')
-def date(name, position):
+def date_search(date):
+    result = list(db.data.find({'date': date}))
+    result[0].pop('_id')
+    return jsonify(result)
+
+@app.route('/covid_countries/<country>')
+def countries(country):
+    results=list(db.data.find())
+    result_json = []
+    for result in results:
+        date = str(result['date'])
+        for _country in result['countries']:
+            if _country['country_name'] == country:
+                result_json.append({date:_country})
+
+                #to use pymongo query instead of the mess above: MongoDB -- db.data.find({ country.country_name : country })
     
-    
+    return jsonify(result_json)
 
 
 if __name__ == "__main__":
