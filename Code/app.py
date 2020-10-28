@@ -46,6 +46,7 @@ def data ():
 
 # Define route to insert new players into the database
 @app.route('/<date>')
+<<<<<<< HEAD
 def date_search(date):
     result = list(db.data.find({'date': date}))
     result[0].pop('_id')
@@ -65,6 +66,11 @@ def countries(country):
     
     return jsonify(result_json)
 
+=======
+def date(date):
+    return 
+    
+>>>>>>> ff46ec7ac5332a8c2987a8c8306ed4cdca7a14f3
 
 if __name__ == "__main__":
-    app.run(debug=True)
+app.run(debug=True)
