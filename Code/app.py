@@ -42,10 +42,9 @@ def data ():
 
 # Define route to insert new players into the database
 @app.route('/<date>')
-def date(name, position):
+def date(date):
+    return 
     
-    
-
 
 if __name__ == "__main__":
-    app.run(debug=True)
+app.run(debug=True)
